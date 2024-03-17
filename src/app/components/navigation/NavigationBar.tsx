@@ -6,9 +6,8 @@ import ProfileButton from "./ProfileButton";
 
 export default function NavigationBar() {
   const [open, setOpen] = useState<boolean>(false);
-  let isLoggedIn = false;
   return (
-    <nav className="border-gray-400 border-b-[1px] bg-zinc-50 sticky top-0 w-full h-[9vh]">
+    <nav className="border-gray-400 border-b-[1px] bg-zinc-50 sticky top-0 w-full h-[9vh] z-50">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link
           href="/"
@@ -41,7 +40,9 @@ export default function NavigationBar() {
           </svg>
         </button>
         <div
-          className={`${open ? "block" : "hidden"} w-full md:block md:w-auto`}
+          className={`${
+            open ? "block" : "hidden"
+          } md:bg-transparent bg-white md:border-0 border-x border-b border-b-gray-300 border-x-gray-300 rounded-b-md w-full md:block md:w-auto`}
         >
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 ">
             {["Feedback", "About"].map((bp) => (

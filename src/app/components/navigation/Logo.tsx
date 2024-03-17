@@ -7,7 +7,7 @@ export default function Logo() {
         alt="Historya Logo"
       />
       <span
-        className="self-center text-4xl font-extrabold whitespace-nowrap text-black bg-gradient-to-r bg-clip-text p-1 text-transparent 
+        className="self-center sm:text-4xl text-xl font-extrabold whitespace-nowrap text-black bg-gradient-to-r bg-clip-text p-1 text-transparent 
             from-indigo-500 via-purple-500 to-indigo-500 
             animate-text"
       >

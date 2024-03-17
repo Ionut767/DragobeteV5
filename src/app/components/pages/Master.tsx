@@ -8,7 +8,6 @@ export default function Master() {
     <main className="flex md:flex-row flex-col-reverse ">
       <ControlBar />
       <Content />
-      <div></div>
     </main>
   );
 }

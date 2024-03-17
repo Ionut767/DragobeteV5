@@ -1,6 +1,7 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
+import Home from "./ContentPages/home";
 
 export default function Content() {
   const searchParams = useSearchParams();
@@ -9,7 +10,7 @@ export default function Content() {
   const content = useMemo(() => {
     switch (section) {
       case "home":
-        return <p>Home</p>;
+        return <Home />;
       case "search":
         return <p>Search</p>;
       case "explore":
@@ -25,13 +26,12 @@ export default function Content() {
       case "profile":
         return <p>Profile</p>;
       default:
-        return null; // In working, return null...
+        return <p>Home</p>; // In working, return null...
     }
   }, [section]);
 
   return (
-    <div className="w-full h-[91vh] bg-zinc-50">
-      <p>Current Section: {section}</p>
+    <div className="w-full h-[91vh] bg-gray-100 flex justify-center ">
       {content}
     </div>
   );

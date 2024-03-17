@@ -1,22 +1,64 @@
+"use client";
 import Link from "next/link";
+import { GoHome } from "react-icons/go";
+import { GoSearch } from "react-icons/go";
+import { GoPlusCircle } from "react-icons/go";
+import { GoVideo } from "react-icons/go";
+import { BiMessageSquareDetail } from "react-icons/bi";
+import { FaRegHeart } from "react-icons/fa";
+import { signIn, useSession } from "next-auth/react";
 
 export default function ControlBar() {
+  const { data: session } = useSession();
+
   return (
-    <div className="flex flex-col bg-zinc-50 h-[91vh] w-72 border-r-[1px] border-gray-400">
-      <div className="mx-4">
+    <div className="md:relative fixed justify-center md:justify-normal flex md:flex-col flex-row bg-zinc-50 md:min-h-[91vh] md:w-72 w-full border-r-[1px] border-gray-400 z-50">
+      <div className="md:px-4 m-2 flex md:flex-col flex-row md:w-auto w-full md:justify-normal justify-around">
         {[
-          "Home",
-          "Search",
-          "Explore",
-          "Shorts",
-          "Messages",
-          "Notifications",
-          "Create",
-          "Profile",
+          { name: "Home", icon: <GoHome /> },
+          { name: "Explore", icon: <GoSearch /> },
+          { name: "Create", icon: <GoPlusCircle /> },
+          { name: "Shorts", icon: <GoVideo /> },
+          { name: "Messages", icon: <BiMessageSquareDetail /> },
+          { name: "Notifications", icon: <FaRegHeart /> },
+          {
+            name: "Profile",
+            icon: (
+              <>
+                {session && session.user?.image ? (
+                  <img
+                    src={session.user?.image}
+                    alt={session.user.name as string}
+                    className=" size-10 rounded-full cursor-pointer"
+                  />
+                ) : (
+                  <button
+                    className="cursor-pointer block py-2 px-3 text-gray-700 rounded hover:bg-gray-300"
+                    onClick={() => signIn("google")}
+                  >
+                    Join
+                  </button>
+                )}
+              </>
+            ),
+          },
         ].map((item) => (
-          <Link href={"/?section=" + item.toLocaleLowerCase()} key={item}>
-            <p className="p-3 my-1 w-full hover:bg-gray-300 rounded-lg font-extrabold transition-colors ease-in duration-300">
-              {item}
+          <Link
+            href={"/?section=" + item.name.toLocaleLowerCase()}
+            key={item.name}
+            className={`flex items-center md:flex-row hover:bg-gray-300 rounded-lg p-3 my-1 ease-in duration-100 ${
+              (item.name === "Messages" && "md:flex hidden") ||
+              (item.name === "Notifications" && "md:flex hidden")
+            }`}
+          >
+            <span className="flex justify-center text-2xl md:mr-2">
+              {item.icon}
+            </span>
+            <p
+              className={`md:block hidden w-full font-extrabold transition-colors 
+              `}
+            >
+              {item.name}
             </p>
           </Link>
         ))}
