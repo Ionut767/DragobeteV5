@@ -1,10 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
-import PostStructure from "./poststructure";
+import PostStructure from "./components/poststructure";
+import Comments from "./components/comments";
 
 export default function Home() {
   const [content, setContent] = useState<any[]>([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState<number>(0);
+  const [openComments, setOpenComments] = useState<boolean>(false);
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
@@ -15,7 +17,7 @@ export default function Home() {
     if (scrollAnchor) {
       observer.observe(scrollAnchor);
     } else {
-      console.error("Scroll anchor not found");
+      console.error("Couldn't load more posts!");
     }
     return () => observer.disconnect();
   }, [fetchMoreContent]);
@@ -29,10 +31,20 @@ export default function Home() {
   return (
     <div className="w-full h-full overflow-y-auto overflow-x-hidden flex flex-col items-center">
       {content.map((item, index) => (
-        <div key={index}>
-          <PostStructure imageSrc={item.download_url} />
+        <div className="w-full flex justify-center" key={index}>
+          <PostStructure
+            openComments={openComments}
+            setOpenComments={setOpenComments}
+            type="Popular"
+            imageSrc={item.download_url}
+            description="@Inorog is the #best robotic team ever! Tech Stuff, programming, etc!"
+          />
         </div>
       ))}
+
+      <Comments openComments={openComments} setOpenComments={setOpenComments} />
+
+      <div className="w-full h-4" />
       <div id="scroll-anchor" className="h-4 w-full text-center">
         Loading...
       </div>

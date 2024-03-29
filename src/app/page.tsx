@@ -9,5 +9,5 @@ export default function Home() {
   if (status === "loading") {
     return <p>Loading...</p>;
   }
-  return <>{session && status === "authenticated" ? <Master /> : <Main />}</>;
+  return <>{session && status === "authenticated" ? <Master /> : <Master />}</>;
 }

@@ -2,6 +2,8 @@
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import Home from "./ContentPages/home";
+import Explore from "./ContentPages/explore";
+import Profile from "./ContentPages/profile";
 
 export default function Content() {
   const searchParams = useSearchParams();
@@ -11,10 +13,8 @@ export default function Content() {
     switch (section) {
       case "home":
         return <Home />;
-      case "search":
-        return <p>Search</p>;
       case "explore":
-        return <p>Explore</p>;
+        return <Explore />;
       case "shorts":
         return <p>Shorts</p>;
       case "messages":
@@ -24,14 +24,14 @@ export default function Content() {
       case "create":
         return <p>Create</p>;
       case "profile":
-        return <p>Profile</p>;
+        return <Profile />;
       default:
-        return <p>Home</p>; // In working, return null...
+        return <Home />; // In working, return null...
     }
   }, [section]);
 
   return (
-    <div className="w-full h-[91vh] bg-gray-100 flex justify-center ">
+    <div className="w-full h-[91svh] bg-gray-100 flex justify-center ">
       {content}
     </div>
   );
