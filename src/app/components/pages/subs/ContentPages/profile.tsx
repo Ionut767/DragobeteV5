@@ -48,7 +48,7 @@ export default function Profile() {
             </p>
           ))}
         </div>
-        <div className="w-full py-4 flex flex-row justify-around border-y border-y-gray-300">
+        <div className="w-full py-4 flex flex-row justify-around border-b border-y-gray-300">
           {[<TbGridScan size={25} />, <FaRegBookmark size={20} />].map(
             (item, index) => (
               <p
