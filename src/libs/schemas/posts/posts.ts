@@ -8,16 +8,7 @@ const PostsDataSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "songs",
       required: false,
-      default: {},
     },
-    likes: { type: Schema.Types.ObjectId, ref: "posts_likes", default: [] },
-    comments: {
-      type: Schema.Types.ObjectId,
-      ref: "posts_comments",
-      default: [],
-    },
-    shares: { type: Schema.Types.ObjectId, ref: "posts_shares", default: [] },
-    saves: { type: Schema.Types.ObjectId, ref: "posts_saves", default: [] },
   },
   {
     timestamps: true,

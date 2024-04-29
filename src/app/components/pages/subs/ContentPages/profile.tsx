@@ -49,17 +49,18 @@ export default function Profile() {
           ))}
         </div>
         <div className="w-full py-4 flex flex-row justify-around border-b border-y-gray-300">
-          {[<TbGridScan size={25} />, <FaRegBookmark size={20} />].map(
-            (item, index) => (
-              <p
-                key={index}
-                className="font-semibold text-sm flex flex-row items-center"
-              >
-                <span className=" sm:mr-1">{item}</span>
-                <span className="sm:block text-lg font-bold hidden">Name</span>
-              </p>
-            )
-          )}
+          {[
+            <TbGridScan key={0} size={25} />,
+            <FaRegBookmark key={1} size={20} />,
+          ].map((item, index) => (
+            <p
+              key={index}
+              className="font-semibold text-sm flex flex-row items-center"
+            >
+              <span className=" sm:mr-1">{item}</span>
+              <span className="sm:block text-lg font-bold hidden">Name</span>
+            </p>
+          ))}
         </div>
       </div>
     );

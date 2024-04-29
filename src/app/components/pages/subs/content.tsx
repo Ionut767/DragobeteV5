@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import Home from "./ContentPages/home";
 import Explore from "./ContentPages/explore";
 import Profile from "./ContentPages/profile";
+import Create from "./ContentPages/create";
 
 export default function Content() {
   const searchParams = useSearchParams();
@@ -22,11 +23,11 @@ export default function Content() {
       case "notifications":
         return <p>Notifications</p>;
       case "create":
-        return <p>Create</p>;
+        return <Create />;
       case "profile":
         return <Profile />;
       default:
-        return <Home />; // In working, return null...
+        return <Home />;
     }
   }, [section]);
 

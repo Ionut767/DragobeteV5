@@ -37,12 +37,16 @@ export const formatText = (text: string) => {
   });
 };
 export default function PostStructure({
+  authorImage,
+  authorName,
   imageSrc,
   description,
   type,
   openComments,
   setOpenComments,
 }: {
+  authorImage: string;
+  authorName: string;
   imageSrc: string;
   description: string;
   type: "Suggested" | "For you" | "Popular";
@@ -58,16 +62,16 @@ export default function PostStructure({
       <div id="profile" className="mt-2 p-2 flex flex-row items-center">
         <div className="flex justify-center rounded-full cursor-pointer size-8 mr-2">
           <Image
-            src={imageSrc}
+            src={authorImage as string}
             alt={"User"}
-            className=" rounded-full cursor-pointer"
+            className=" rounded-full cursor-pointer object-cover"
             width={100}
             height={100}
             loading="lazy"
           />
         </div>
         <div className="flex flex-col">
-          <p className="font-bold text-sm">Intus23</p>
+          <p className="font-bold text-sm">{authorName as string}</p>
           <p className=" text-xs italic">{type}</p>
         </div>
       </div>
@@ -102,7 +106,7 @@ export default function PostStructure({
           )}
           <Image
             onDoubleClick={() => setIsLiked(!isLiked)}
-            src={imageSrc}
+            src={`https://lh3.googleusercontent.com/d/${imageSrc}`}
             className={`w-full h-full max-h-[650px] object-cover md:rounded-lg z-0 relative ${
               isLoading && "blur-sm"
             } transition-all duration-1000`}
@@ -124,9 +128,9 @@ export default function PostStructure({
           >
             <div className="flex flex-row">
               {[
-                <FaHeart size={25} color={`${isLiked ? "red" : ""}`} />,
-                <FaRegCommentDots size={25} />,
-                <FaRegPaperPlane size={25} />,
+                <FaHeart size={25} key={0} color={`${isLiked ? "red" : ""}`} />,
+                <FaRegCommentDots key={1} size={25} />,
+                <FaRegPaperPlane key={2} size={25} />,
               ].map((item, index) => (
                 <span
                   key={index}

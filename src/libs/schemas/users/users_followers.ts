@@ -14,6 +14,6 @@ const FollowersIdSchemaModel = new Schema(
   }
 );
 let FollowersSchema =
-  mongoose.models.followers_id ||
+  mongoose.models.users_followers ||
   mongoose.model("users_followers", FollowersIdSchemaModel);
 export default FollowersSchema;

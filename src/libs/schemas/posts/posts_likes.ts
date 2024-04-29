@@ -5,7 +5,14 @@ const PostsSavesSchemaModel = new Schema(
   {
     _id: { type: ObjectId, required: true },
     postId: { type: Schema.Types.ObjectId, ref: "posts", required: true },
-    likes: [{ type: Schema.Types.ObjectId, ref: "users", required: true }],
+    likes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "users",
+        required: true,
+        default: [],
+      },
+    ],
   },
   {
     timestamps: true,

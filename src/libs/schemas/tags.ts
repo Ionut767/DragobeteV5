@@ -5,7 +5,7 @@ const TagsSchemaModel = new Schema(
   {
     _id: { type: ObjectId, required: true },
     name: { type: String, required: true },
-    videos: { type: Schema.Types.ObjectId, ref: "posts", default: [] },
+    videos: [{ type: Schema.Types.ObjectId, ref: "posts", default: [] }],
   },
   {
     timestamps: true,
