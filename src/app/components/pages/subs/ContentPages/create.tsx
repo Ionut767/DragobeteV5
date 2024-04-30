@@ -2,15 +2,17 @@
 
 import { addPost } from "@/app/servercomponents/postsActions";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { ChangeEvent, SetStateAction, useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import {
   BsCameraVideo,
   BsFileEarmarkArrowUp,
   BsFillCloudArrowUpFill,
 } from "react-icons/bs";
+import * as nsfwjs from "nsfwjs";
+import * as tf from "@tensorflow/tfjs";
 // import { formatText } from "./components/poststructure"; //for preview
-
+tf.enableProdMode();
 export default function Create() {
   const [state, formAction] = useFormState(addPost, {
     code: 0,
@@ -20,36 +22,66 @@ export default function Create() {
   const [selectedFile, setSelectedFile] = useState<File>();
   const [imageSize, setImageSize] = useState<number>(0);
   const [dragging, setDragging] = useState<boolean>(false);
-  // const [description, setDescription] = useState<string>(""); ///for preview
-  const eventDrop = (event: React.DragEvent<HTMLLabelElement>) => {
-    event.preventDefault();
-    if (event.dataTransfer?.files.length) {
-      state.code = 0;
-      state.error = "";
-      setSelectedFile(event.dataTransfer.files[0]);
+  async function generalEvent(
+    e: React.DragEvent<HTMLLabelElement> | React.ChangeEvent<HTMLInputElement>
+  ) {
+    let files;
+    if ("target" in e && e.target instanceof HTMLInputElement) {
+      files = e.target.files;
+    } else if ("dataTransfer" in e) {
+      files = e.dataTransfer.files;
     }
-  };
-  useEffect(() => {
-    if (selectedFile) {
-      const objectUrl = URL.createObjectURL(selectedFile);
+    e.preventDefault();
+    if (files) {
+      if (
+        files[0].type.split("/")[0] !== "image" ||
+        !["jpeg", "png", "gif", "webp", "jpg"].includes(
+          files[0].type.split("/")[1]
+        )
+      ) {
+        setSelectedFile(undefined);
+        setDragging(false);
+        alert(
+          "Oops! The selected file is not an image. Please choose another one."
+        );
+        return;
+      }
+      const objectUrl = URL.createObjectURL(files[0]);
       const img = new (window as any).Image();
-      img.onload = function () {
-        setImageSize(parseFloat((selectedFile.size / 1024 / 1024).toFixed(2)));
-        if (imageSize > 5) {
+
+      img.onload = async () => {
+        const model = nsfwjs.load();
+        const image = tf.browser.fromPixels(img);
+        const predictions = (await model).classify(image);
+        image.dispose();
+
+        const nsfwCategories = ["Hentai", "Porn", "Sexy"];
+        const nsfwPrediction = (await predictions).find((prediction) =>
+          nsfwCategories.includes(prediction.className)
+        );
+        if (nsfwPrediction && nsfwPrediction.probability > 0.85) {
           setSelectedFile(undefined);
-          state.code = 400;
-          state.error =
-            "Oops! The selected image doesn't meet our size requirements. Please choose another one.";
-        } else {
-          state.code = 0;
-          state.error = "";
+          alert("Oops! The selected image is classified as NSFW.");
         }
       };
       img.src = objectUrl;
+
+      const imageSize = parseFloat((files[0].size / 1024 / 1024).toFixed(2));
+      setImageSize(imageSize);
+
+      if (files[0].size > 5 * 1024 * 1024 || files[0].size < 0) {
+        setSelectedFile(undefined);
+        setDragging(false);
+        alert(
+          "Oops! The selected image doesn't meet our size requirements. Please choose another one."
+        );
+      } else {
+        setSelectedFile(files[0]);
+        setDragging(false);
+      }
       return () => URL.revokeObjectURL(objectUrl);
     }
-  }, [selectedFile, imageSize]);
-
+  }
   function SubmitButton() {
     const { pending } = useFormStatus();
     return (
@@ -86,7 +118,9 @@ export default function Create() {
                 setDragging(true);
               }}
               onDragLeave={() => setDragging(false)}
-              onDrop={eventDrop}
+              onDrop={(e) => {
+                generalEvent(e);
+              }}
             >
               <div className="w-full h-full flex justify-center items-center flex-col">
                 <BsFillCloudArrowUpFill color="gray" size={80} />
@@ -126,13 +160,12 @@ export default function Create() {
               type="file"
               name="source"
               onChange={(e) => {
-                setSelectedFile(e.target.files?.[0]);
-                setDragging(false);
+                generalEvent(e);
               }}
               required
               id="source"
               placeholder="source"
-              accept=".jpg, .png, .gif, .webp, .jpeg"
+              accept="image/jpg, image/png, image/gif, image/webp, image/jpeg"
             />
           </>
         ) : (
@@ -156,7 +189,6 @@ export default function Create() {
                     } bg-[#F8F8F8] resize-none shadow appearance-none border rounded w-full max-h-[100px] min-h-[100px] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline`}
                     name="description"
                     id="description"
-                    // onChange={(e) => setDescription(e.target.value)}
                     placeholder="Short description of the post..."
                   />
                 </div>

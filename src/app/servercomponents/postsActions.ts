@@ -35,7 +35,12 @@ export async function addPost(prevState: any, formData: FormData) {
         error: "Unauthorized! Please log in first.",
       };
     }
-
+    if (!formData.get("source"))
+      return {
+        ...prevState,
+        code: 400, //bad request
+        error: "Oops! No image or file selected!",
+      };
     if (
       ![
         "image/jpeg",
@@ -79,7 +84,6 @@ export async function addPost(prevState: any, formData: FormData) {
           "Oops! The description contains profanity. Please respect our community rules!",
       };
     }
-
     const auth = new google.auth.GoogleAuth({
       keyFile: ("./src/app/servercomponents/secrets/" +
         process.env.DRIVE_JSON_NAME) as string,
