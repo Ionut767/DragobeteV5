@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET as string,
   },
   debug: process.env.NODE_ENV === "development",
-  useSecureCookies: false, // force https - false for localhost
+  useSecureCookies: true, // force https - false for localhost
   callbacks: {
     async session({ session, token }) {
       if (session?.user) session.user.role = token.role;
