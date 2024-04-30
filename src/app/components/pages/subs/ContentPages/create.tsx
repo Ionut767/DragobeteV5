@@ -2,7 +2,7 @@
 
 import { addPost } from "@/app/servercomponents/postsActions";
 import Image from "next/image";
-import { ChangeEvent, SetStateAction, useEffect, useState } from "react";
+import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import {
   BsCameraVideo,
